@@ -97,8 +97,8 @@ endian = 'little'
 
 EOF
 
-if [ ! -d "${dir_name}-${ABI}" ]; then
-  mkdir ${dir_name}-${ABI}
+if [ ! -d "${dir_name}/${ABI}" ]; then
+  mkdir -p ${dir_name}/${ABI}
 else
   echo "Already built for ${ABI}"
   exit 0
@@ -112,11 +112,17 @@ cd dav1d
 #git checkout 191f79d5a914c647fa941ee8c72f807ca2bd1fcb
 
 echo "Build: calling meson..."
-meson --buildtype release --cross-file ../android_cross_${ABI}.txt -Denable_tools=false -Denable_tests=false ../${dir_name}-${ABI}
+meson --default-library=static --buildtype release --cross-file ../android_cross_${ABI}.txt -Denable_tools=false -Denable_tests=false ../${dir_name}/${ABI}
 
 echo "Building with Ninja"
-#cd ${dir_name}-${ABI}
-ninja -C  ../${dir_name}-${ABI}
-$SED -i 's:libdav1d\.so\.[0-9]:libdav1d\.so\x0\x0:' $($READLINK -f ../${dir_name}-${ABI}/src/libdav1d.so)
+#cd ${dir_name}/${ABI}
+ninja -C  ../${dir_name}/${ABI}
+
+if [ ! -d ../${dir_name}/${ABI}/src/libdav1d.a ]; then
+  cp ../${dir_name}/${ABI}/src/libdav1d.a ../${dir_name}/${ABI}/libdav1d.a
+else
+  cp ../${dir_name}/${ABI}/src/libdav1d.so ../${dir_name}/${ABI}/libdav1d.so
+  $SED -i 's:libdav1d\.so\.[0-9]:libdav1d\.so\x0\x0:' $($READLINK -f ../${dir_name}/${ABI}/src/libdav1d.so)
+fi
 
 echo "Done!"
