@@ -112,7 +112,7 @@ cd dav1d
 #git checkout 191f79d5a914c647fa941ee8c72f807ca2bd1fcb
 
 echo "Build: calling meson..."
-meson --default-library=static --buildtype release --cross-file ../android_cross_${ABI}.txt -Denable_tools=false -Denable_tests=false ../${dir_name}-${ABI}
+meson --buildtype release --cross-file ../android_cross_${ABI}.txt -Denable_tools=false -Denable_tests=false ../${dir_name}-${ABI}
 
 echo "Building with Ninja"
 #cd ${dir_name}-${ABI}

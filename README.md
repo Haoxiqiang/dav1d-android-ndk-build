@@ -15,4 +15,6 @@ android dev kits 'ndk;23.1.7779620' 'cmake;3.18.1' 'build-tools;30.0.3'
 ./build.sh arm
 or
 ./build_all.sh
+
+if you want use a static library. change build.sh#Line 115 --default-library=static 
 ```
